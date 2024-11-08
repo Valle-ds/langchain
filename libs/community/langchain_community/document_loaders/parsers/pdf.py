@@ -71,7 +71,7 @@ def extract_from_images_with_rapidocr(
             "`rapidocr-onnxruntime` package not found, please install it with "
             "`pip install rapidocr-onnxruntime`"
         )
-    ocr = RapidOCR()
+    ocr = RapidOCR(rec_model_path='cyrillic_PP-OCRv3_rec_infer.onnx')
     text = ""
     for img in images:
         result, _ = ocr(img)
