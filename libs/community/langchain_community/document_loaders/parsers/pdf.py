@@ -53,7 +53,7 @@ _PDF_FILTER_WITHOUT_LOSS = [
 def extract_from_images_with_rapidocr(
     images: Sequence[Union[Iterable[np.ndarray], bytes]],
 ) -> str:
-    """Extract text from images with RapidOCR.
+    """Extract text from images with EasyOCR.
 
     Args:
         images: Images to extract text from.
@@ -65,18 +65,18 @@ def extract_from_images_with_rapidocr(
         ImportError: If `rapidocr-onnxruntime` package is not installed.
     """
     try:
-        from rapidocr_onnxruntime import RapidOCR
+        import easyocr
     except ImportError:
         raise ImportError(
-            "`rapidocr-onnxruntime` package not found, please install it with "
-            "`pip install rapidocr-onnxruntime`"
+            "`easyocr` package not found, please install it with "
+            "`pip install easyocr`"
         )
-    ocr = RapidOCR(rec_model_path='cyrillic_PP-OCRv3_rec_infer.onnx')
+    reader = easyocr.Reader(['ru','en'])
     text = ""
     for img in images:
-        result, _ = ocr(img)
+        result = reader.readtext(img, detail = 0)
         if result:
-            result = [text[1] for text in result]
+            result = [text for text in result]
             text += "\n".join(result)
     return text
 
