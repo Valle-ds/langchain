@@ -17,6 +17,7 @@ from typing import (
 from urllib.parse import urlparse
 
 import numpy as np
+import torch
 from langchain_core.documents import Document
 
 from langchain_community.document_loaders.base import BaseBlobParser
@@ -71,7 +72,7 @@ def extract_from_images_with_rapidocr(
             "`easyocr` package not found, please install it with "
             "`pip install easyocr`"
         )
-    reader = easyocr.Reader(['ru','en'])
+    reader = easyocr.Reader(['ru','en'], gpu=torch.cuda.is_available())
     text = ""
     for img in images:
         result = reader.readtext(img, detail = 0)
